@@ -141,13 +141,13 @@
         >
           mdi-eye
         </v-icon>
-        <v-icon
+        <!-- <v-icon
           small
           class="mr-2"
           @click="editItem(item)"
         >
           mdi-pencil
-        </v-icon>
+        </v-icon> -->
         <v-icon
           small
           @click="deleteItem(item.id)"
@@ -166,7 +166,7 @@
     </v-data-table>
     <v-pagination
       v-model="page"
-      @input="go"
+      @input="initialize"
       :length="lengthPage"
       :total-visible="perPage"
     ></v-pagination>
@@ -205,7 +205,7 @@ export default {
     ...mapActions({
       setAlert: "alert/set",
     }),
-    go() {
+    initialize() {
       const config = {
         method: 'get',
         url: this.apiDomain + '/api/v2/blog?page=' + this.page
@@ -233,6 +233,7 @@ export default {
           params: { _method: 'DELETE' },
           headers: {
             Authorization: "Token" + this.token,
+            "Access-Control-Allow-Origin": "*"
           },
         }
         console.log(config)
@@ -244,7 +245,7 @@ export default {
             color: "success",
             text: "Data Berhasil Dihapus",
           })
-          this.go()
+          this.initialize()
         })
         .catch(error => {
           console.log(error)
@@ -253,7 +254,7 @@ export default {
     },
   },
   created(){
-    this.go()
+    this.initialize()
   }
 }
 </script>
