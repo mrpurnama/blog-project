@@ -8,7 +8,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    apiDomain: "http://demo-api-vue.sanbercloud.com",
+    apiDomain: "https://demo-api-vue.sanbercloud.com",
   },
   modules: {
     alert,
