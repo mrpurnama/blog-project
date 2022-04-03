@@ -43,8 +43,8 @@
           <v-form ref="form" class="form-container">
             <v-text-field v-model="email" label="E-mail" required append-icon="mdi-email"></v-text-field>
             <v-text-field v-model="name" label="Name" required append-icon="mdi-account"></v-text-field>
-            <v-text-field v-model="password" label="Password" counter :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :type="showPassword ? 'text' : 'password'" @click:append="showPassword = !showPassword"></v-text-field>
-            <input type="file" name="photo" ref="photo" />
+            <v-text-field v-model="password" label="Password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :type="showPassword ? 'text' : 'password'" @click:append="showPassword = !showPassword"></v-text-field>
+            <input type="file" name="photo" ref="photo" required />
             <div style="margin: 16px 0;">Sudah punya akun ? <span class="primary--text clickable-register" @click="login">Login Disini</span></div>
             <div class="text-xs-center button-container">
               <v-btn @click="close">
@@ -75,6 +75,7 @@ export default {
   methods: {
     ...mapActions({
       setAlert: "alert/set",
+      setToken: "auth/setToken",
       setDialogComponent: "dialog/setComponent",
     }),
     close() {
@@ -98,20 +99,38 @@ export default {
 
       this.axios(config)
         .then(() => {
+          let formDataLogin = new FormData()
+          formDataLogin.append("email", this.email)
+          formDataLogin.append("password", this.password)
+          const configLogin = {
+            method: "post",
+            url: this.$store.state.apiDomain + "/api/v2/auth/login",
+            data: formData,
+          }
 
-          this.setAlert({
-            status: true,
-            color: "success",
-            text: "register berhasil",
-          })
-          this.close()
+          this.axios(configLogin)
+            .then((response) => {
+              this.setToken(response.data.access_token)
+              this.setAlert({
+                status: true,
+                color: "success",
+                text: "Registrasi berhasil",
+              })
+              this.close()
+            })
+            .catch(() => {
+              this.setAlert({
+                status: true,
+                color: "error",
+                text: "Login gagal! Silahkan coba lagi",
+              })
+            })
         })
-        .catch((response) => {
-          console.log(response)
+        .catch(() => {
           this.setAlert({
             status: true,
             color: "error",
-            text: "register gagal",
+            text: "Registrasi gagal! Silahkan coba lagi",
           })
         })
     },

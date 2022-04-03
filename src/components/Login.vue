@@ -102,8 +102,7 @@ export default {
           })
           this.close()
         })
-        .catch((response) => {
-          console.log(response)
+        .catch(() => {
           this.setAlert({
             status: true,
             color: "error",
