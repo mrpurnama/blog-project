@@ -12,6 +12,7 @@ export default {
   components: {
     Login: () => import("./Login.vue"),
     Register: () => import("./Register.vue"),
+    AddBlog: () => import("./AddBlog.vue"),
   },
   computed: {
     ...mapGetters({
